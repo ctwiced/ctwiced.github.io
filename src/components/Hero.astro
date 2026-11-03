@@ -1,6 +1,12 @@
+---
+import heroWasmUrl from '@rive-app/canvas/rive.wasm?url';
+const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.riv`;
+---
+<link rel="preload" href={heroSource} as="fetch" crossorigin="anonymous" />
+<link rel="preload" href={heroWasmUrl} as="fetch" crossorigin="anonymous" />
 <header class="hero">
   <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">Chris — Product designer</h1>
-  <div class="animation" data-src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.riv`}>
+  <div class="animation" data-src={heroSource}>
     <canvas aria-hidden="true"></canvas>
   </div>
 </header>
@@ -16,10 +22,13 @@
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     RuntimeLoader.setWasmUrl(wasmUrl);
     try {
-      const response = await fetch(container.dataset.src!);
-      if (!response.ok) throw new Error('Unable to load hero');
-      const buffer = await response.arrayBuffer();
-      const runtime = await RuntimeLoader.awaitInstance();
+      const [buffer, runtime] = await Promise.all([
+        fetch(container.dataset.src!).then(response => {
+          if (!response.ok) throw new Error('Unable to load hero');
+          return response.arrayBuffer();
+        }),
+        RuntimeLoader.awaitInstance(),
+      ]);
       const file = await runtime.load(new Uint8Array(buffer));
       const artboard = file.defaultArtboard();
       const animation = artboard.animationByIndex(0) as ReturnType<typeof artboard.animationByIndex> & {
