@@ -1,0 +1,8 @@
+{
+  "name": "chris-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview" },
+  "dependencies": { "astro": "^7.3.8", "@fontsource-variable/inter": "^5.0.0" }
+}
