@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter';
+import interFontUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import Hero from '../components/Hero.astro';
 const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLinkt', 'Immigrate Software', 'Vendasta', 'Curbie Cars', 'Skyware Studios'];
 ---
@@ -8,6 +9,7 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={interFontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     <meta name="description" content="Chris, Product designer. Currently working on QAKoala." />
     <meta name="theme-color" content="#ffffff" />
     <title>chris — Product designer</title>
@@ -19,7 +21,7 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
       <div id="work" class="work">
         <section aria-labelledby="current-title">
           <h2 id="current-title">Currently working on<span class="cursor" aria-hidden="true">_</span></h2>
-          <div class="current"><p>QAKoala</p><span class="badge">Coming soon</span></div>
+          <div class="current"><a href="https://qakoala.com/">QAKoala</a></div>
         </section>
         <section aria-labelledby="previous-title">
           <h2 id="previous-title">Previously with</h2>
@@ -34,7 +36,7 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
   :root { font-family: 'Inter Variable', sans-serif; color: #292b25; background: #ffffff; font-synthesis: none; -webkit-font-smoothing: antialiased; }
   :root { --section-gap: 56px; }
   * { box-sizing: border-box; }
-  body { margin: 0; }
+  body { margin: 0; line-height: 1.5; }
   main { width: min(100% - 48px, 780px); margin: auto; padding-bottom: 80px; }
   .work { max-width: 520px; margin: auto; scroll-margin-top: 32px; }
   section + section { margin-top: var(--section-gap); }
@@ -43,10 +45,11 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
   @keyframes blink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
   .current { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .current p { margin: 0; font-size: 23px; letter-spacing: -.045em; font-weight: 500; }
-  .badge { padding: 5px 9px; border-radius: 5px; background: #eeeee6; color: #717367; font-size: 10px; font-weight: 500; }
+  .current a { font-size: 23px; letter-spacing: -.045em; font-weight: 400; color: inherit; text-decoration: none; padding: 4px 8px; margin: -4px -8px; border-radius: 5px; }
+  .current a:hover, .current a:active, .current a:focus-visible { background: #f1f1ef; }
+  .current a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
-  li { font-size: 20px; letter-spacing: -.035em; line-height: 1.4; }
+  li { font-size: 20px; font-weight: 400; letter-spacing: -.035em; line-height: 1.4; }
   .skip { position: absolute; top: 12px; left: 12px; padding: 12px; background: #292b25; color: white; transform: translateY(-200%); z-index: 1; }
   .skip:focus { transform: none; }
   @media (max-width: 600px) { .work { max-width: 360px; } li { font-size: 18px; } }
