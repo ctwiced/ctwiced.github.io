@@ -32,11 +32,12 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
 
 <style is:global>
   :root { font-family: 'Inter Variable', sans-serif; color: #292b25; background: #ffffff; font-synthesis: none; -webkit-font-smoothing: antialiased; }
+  :root { --section-gap: 56px; }
   * { box-sizing: border-box; }
   body { margin: 0; }
   main { width: min(100% - 48px, 780px); margin: auto; padding-bottom: 80px; }
   .work { max-width: 520px; margin: auto; scroll-margin-top: 32px; }
-  section + section { margin-top: 56px; }
+  section + section { margin-top: var(--section-gap); }
   h2 { display: flex; align-items: center; gap: 12px; margin: 0 0 22px; font-size: 13px; font-weight: 500; color: #696b61; letter-spacing: -.015em; }
   .dot { flex: 0 0 6px; height: 6px; border-radius: 50%; background: #a6a79f; }
   .dot.active { background: #75a56c; box-shadow: 0 0 0 4px #75a56c0d, 0 0 10px #75a56c65; }

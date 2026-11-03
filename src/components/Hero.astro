@@ -23,12 +23,16 @@
       const runtime = await RuntimeLoader.awaitInstance();
       const file = await runtime.load(new Uint8Array(buffer));
       const artboard = file.defaultArtboard();
-      const animation = artboard.animationByIndex(0);
-      const instance = new runtime.LinearAnimationInstance(animation, artboard);
+      const animation = artboard.animationByIndex(0) as ReturnType<typeof artboard.animationByIndex> & {
+        duration: number;
+        fps: number;
+        workEnd: number;
+        enableWorkArea: boolean;
+      };
       const animationName = animation.name;
-      const endTime = (instance.workEnd > instance.workStart ? instance.workEnd : instance.duration) / instance.fps;
+      const lastFrame = animation.enableWorkArea ? animation.workEnd : animation.duration;
+      const endTime = Math.max(0, lastFrame - 0.01) / animation.fps;
       container.style.aspectRatio = `${artboard.bounds.maxX - artboard.bounds.minX} / ${artboard.bounds.maxY - artboard.bounds.minY}`;
-      instance.delete();
       artboard.delete();
       file.delete();
       const player = new Rive({
@@ -45,7 +49,7 @@
       });
       function finish() {
         player.pause(animationName);
-        player.scrub(animationName, Math.max(0, endTime - 0.001));
+        player.scrub(animationName, endTime);
       }
       const observer = new ResizeObserver(() => player.resizeDrawingSurfaceToCanvas());
       observer.observe(container);
@@ -64,13 +68,13 @@
 </script>
 
 <style>
-  .hero { text-align: center; padding: 64px 0 80px; }
-  .animation { position: relative; width: 100%; aspect-ratio: 2 / 1; }
+  .hero { max-width: 520px; margin: auto; text-align: left; padding: 64px 0 var(--section-gap); }
+  .animation { position: relative; width: min(390px, calc((100vw - 48px) / 2)); aspect-ratio: 2 / 1; }
   canvas { display: block; width: 100%; height: 100%; opacity: 0; }
   .loaded canvas { opacity: 1; }
-  .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; font-size: clamp(100px, 19vw, 184px); letter-spacing: -.085em; }
+  .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; font-size: clamp(50px, 9.5vw, 92px); letter-spacing: -.085em; }
   .loaded .fallback { display: none; }
-  .fallback p { margin: 27px 0 0; font-size: 23px; letter-spacing: -.035em; color: #65645c; }
+  .fallback p { margin: 14px 0 0; font-size: 16px; letter-spacing: -.035em; color: #65645c; }
   h1 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  @media (max-width: 600px) { .hero { padding: 40px 0 64px; } }
+  @media (max-width: 600px) { .hero { max-width: 360px; padding-top: 40px; } }
 </style>
