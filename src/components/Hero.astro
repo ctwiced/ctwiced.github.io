@@ -2,7 +2,6 @@
   <h1>Chris — Product designer</h1>
   <div class="animation" data-src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.riv`}>
     <canvas aria-hidden="true"></canvas>
-    <div class="fallback" aria-hidden="true">chris<p>Product designer</p></div>
   </div>
 </header>
 
@@ -72,9 +71,6 @@
   .animation { position: relative; width: min(390px, calc((100vw - 48px) / 2)); aspect-ratio: 2 / 1; }
   canvas { display: block; width: 100%; height: 100%; opacity: 0; }
   .loaded canvas { opacity: 1; }
-  .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; font-size: clamp(50px, 9.5vw, 92px); letter-spacing: -.085em; }
-  .loaded .fallback { display: none; }
-  .fallback p { margin: 14px 0 0; font-size: 16px; letter-spacing: -.035em; color: #65645c; }
   h1 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (max-width: 600px) { .hero { max-width: 360px; padding-top: 40px; } }
 </style>
