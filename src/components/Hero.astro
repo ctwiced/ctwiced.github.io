@@ -12,7 +12,7 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
 </header>
 
 <script>
-  import { Rive, RuntimeLoader, Layout, Fit } from '@rive-app/canvas';
+  import { Rive, RiveFile, RuntimeLoader, Layout, Fit } from '@rive-app/canvas';
   import wasmUrl from '@rive-app/canvas/rive.wasm?url';
 
   async function initializeHero() {
@@ -22,14 +22,16 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     RuntimeLoader.setWasmUrl(wasmUrl);
     try {
-      const [buffer, runtime] = await Promise.all([
+      const [buffer] = await Promise.all([
         fetch(container.dataset.src!).then(response => {
           if (!response.ok) throw new Error('Unable to load hero');
           return response.arrayBuffer();
         }),
         RuntimeLoader.awaitInstance(),
       ]);
-      const file = await runtime.load(new Uint8Array(buffer));
+      const sharedFile = new RiveFile({ buffer });
+      await sharedFile.init();
+      const file = sharedFile.getInstance();
       const artboard = file.defaultArtboard();
       const animation = artboard.animationByIndex(0) as ReturnType<typeof artboard.animationByIndex> & {
         duration: number;
@@ -40,11 +42,9 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
       const animationName = animation.name;
       const lastFrame = animation.enableWorkArea ? animation.workEnd : animation.duration;
       const endTime = Math.max(0, lastFrame - 0.01) / animation.fps;
-      container.style.aspectRatio = `${artboard.bounds.maxX - artboard.bounds.minX} / ${artboard.bounds.maxY - artboard.bounds.minY}`;
       artboard.delete();
-      file.delete();
       const player = new Rive({
-        buffer, canvas, autoplay: false,
+        riveFile: sharedFile, canvas, autoplay: false,
         layout: new Layout({ fit: Fit.Contain }),
         onLoad() {
           player.resizeDrawingSurfaceToCanvas();
@@ -67,6 +67,7 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
         observer.disconnect();
         motion.removeEventListener('change', reduceMotion);
         player.cleanup();
+        sharedFile.cleanup();
       }, { once: true });
     } catch (error) {
       console.error('Hero animation unavailable', error);
@@ -78,7 +79,7 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
 <style>
   .hero { max-width: 520px; margin: auto; text-align: left; padding: 64px 0 var(--section-gap); }
   .animation { position: relative; width: min(390px, calc((100vw - 48px) / 2)); aspect-ratio: 2 / 1; }
-  canvas { display: block; width: 100%; height: 100%; opacity: 0; }
+  canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
   .loaded canvas { opacity: 1; }
   @media (max-width: 600px) { .hero { max-width: 360px; padding-top: 40px; } }
 </style>
