@@ -1,15 +1,16 @@
 ---
 import heroWasmUrl from '@rive-app/canvas/rive.wasm?url';
-import staticHero from '../../public/chris_hero_static.svg?raw';
 const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.riv`;
+const staticSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero_static.riv`;
 ---
 <link rel="preload" href={heroSource} as="fetch" crossorigin="anonymous" />
+<link rel="preload" href={staticSource} as="fetch" crossorigin="anonymous" />
 <link rel="preload" href={heroWasmUrl} as="fetch" crossorigin="anonymous" />
 <header class="hero">
   <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">Chris — Product designer</h1>
-  <div class="animation" data-src={heroSource}>
-    <div class="static-hero" aria-hidden="true" set:html={staticHero}></div>
-    <canvas aria-hidden="true"></canvas>
+  <div class="animation" data-src={heroSource} data-static-src={staticSource}>
+    <canvas class="static-hero" aria-hidden="true"></canvas>
+    <canvas class="animated-hero" aria-hidden="true"></canvas>
   </div>
 </header>
 
@@ -19,11 +20,28 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
 
   async function initializeHero() {
     const container = document.querySelector<HTMLElement>('.animation');
-    const canvas = container?.querySelector('canvas');
-    if (!container || !canvas) return;
+    const canvas = container?.querySelector<HTMLCanvasElement>('.animated-hero');
+    const staticCanvas = container?.querySelector<HTMLCanvasElement>('.static-hero');
+    if (!container || !canvas || !staticCanvas) return;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motion.matches) return;
     RuntimeLoader.setWasmUrl(wasmUrl);
+    const placeholder = new Rive({
+      src: container.dataset.staticSrc!,
+      canvas: staticCanvas,
+      autoplay: false,
+      layout: new Layout({ fit: Fit.Contain, alignment: Alignment.TopLeft }),
+      onLoad() {
+        placeholder.resizeDrawingSurfaceToCanvas();
+        container.classList.add('static-loaded');
+      },
+    });
+    const staticObserver = new ResizeObserver(() => placeholder.resizeDrawingSurfaceToCanvas());
+    staticObserver.observe(container);
+    window.addEventListener('pagehide', () => {
+      staticObserver.disconnect();
+      placeholder.cleanup();
+    }, { once: true });
+    if (motion.matches) return;
     try {
       const [buffer] = await Promise.all([
         fetch(container.dataset.src!).then(response => {
@@ -91,10 +109,9 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
 <style>
   .hero { max-width: 520px; margin: auto; text-align: left; padding: 64px 0 var(--section-gap); }
   .animation { position: relative; width: min(390px, calc((100vw - 48px) / 2)); aspect-ratio: 138 / 80; transform: translateX(-4.615%); }
-  .static-hero { position: absolute; inset: 0; }
-  .static-hero :global(svg) { display: block; width: 100%; height: 100%; }
+  .static-loaded .static-hero { opacity: 1; }
   .loaded .static-hero { visibility: hidden; }
   canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; }
-  .loaded canvas { opacity: 1; }
+  .loaded .animated-hero { opacity: 1; }
   @media (max-width: 600px) { .hero { max-width: 360px; padding-top: 40px; } }
 </style>
