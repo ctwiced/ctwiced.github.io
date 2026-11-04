@@ -14,7 +14,7 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
 </header>
 
 <script>
-  import { Rive, RiveFile, RuntimeLoader, Layout, Fit } from '@rive-app/canvas';
+  import { Rive, RiveFile, RuntimeLoader, Layout, Fit, Alignment } from '@rive-app/canvas';
   import wasmUrl from '@rive-app/canvas/rive.wasm?url';
 
   async function initializeHero() {
@@ -48,7 +48,7 @@ const heroSource = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chris_hero.ri
       artboard.delete();
       const player = new Rive({
         riveFile: sharedFile, canvas, autoplay: false,
-        layout: new Layout({ fit: Fit.Contain }),
+        layout: new Layout({ fit: Fit.Contain, alignment: Alignment.TopLeft }),
         onLoad() {
           player.resizeDrawingSurfaceToCanvas();
           if (motion.matches) finish();
