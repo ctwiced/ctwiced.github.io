@@ -2,7 +2,6 @@
 import '@fontsource-variable/inter';
 import interFontUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import Hero from '../components/Hero.astro';
-const chatPath = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chat/`;
 const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLinkt', 'Immigrate Software', 'Vendasta', 'Curbie Cars', 'Skyware Studios'];
 ---
 <!doctype html>
@@ -28,7 +27,7 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
           <h2 id="previous-title">Previously with</h2>
           <ul>{companies.map(company => <li>{company}</li>)}</ul>
         </section>
-        <a class="chat-link" href={chatPath}>Let’s chat</a>
+        <a class="chat-link" href="https://calendly.com/cjjcooper/30min">Let’s chat</a>
       </div>
     </main>
   </body>
