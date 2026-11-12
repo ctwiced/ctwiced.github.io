@@ -43,13 +43,14 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
   .work { max-width: 520px; margin: auto; scroll-margin-top: 32px; }
   section + section { margin-top: var(--section-gap); }
   h2 { margin: 0 0 22px; font-size: 24px; font-weight: 700; color: inherit; letter-spacing: -.035em; line-height: 1.3; }
-  .current { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .current a { color: inherit; text-decoration: none; padding: 4px 8px; margin: -4px -8px; border-radius: 5px; }
+  .current { display: grid; gap: 4px; }
+  .current a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; color: inherit; text-decoration: none; padding: 4px 12px 4px 0; border-radius: 5px; }
+  .current a::after { content: ''; flex: 0 0 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: rotate(45deg); }
   .current a:hover, .current a:active, .current a:focus-visible { background: #f1f1ef; }
   .current a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-  .chat-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--section-gap); padding: 8px 16px; border-radius: 6px; background: #292b25; color: #ffffff; font-weight: 600; text-decoration: none; }
+  .chat-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--section-gap); padding: 8px 16px; border-radius: 6px; background: #121212; color: #ffffff; font-weight: 600; text-decoration: none; }
   .chat-link:hover { background: #45473e; }
-  .chat-link:focus-visible { outline: 2px solid #292b25; outline-offset: 3px; }
+  .chat-link:focus-visible { outline: 2px solid #121212; outline-offset: 3px; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
   li, .current a { font-size: 20px; font-weight: 400; letter-spacing: -.035em; line-height: 1.4; }
   .skip { position: absolute; top: 12px; left: 12px; padding: 12px; background: #292b25; color: white; transform: translateY(-200%); z-index: 1; }
