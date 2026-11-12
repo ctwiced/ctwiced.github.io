@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter';
 import interFontUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import Hero from '../components/Hero.astro';
+const chatPath = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/chat/`;
 const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLinkt', 'Immigrate Software', 'Vendasta', 'Curbie Cars', 'Skyware Studios'];
 ---
 <!doctype html>
@@ -27,6 +28,7 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
           <h2 id="previous-title">Previously with</h2>
           <ul>{companies.map(company => <li>{company}</li>)}</ul>
         </section>
+        <a class="chat-link" href={chatPath}>Let’s chat</a>
       </div>
     </main>
   </body>
@@ -45,6 +47,9 @@ const companies = ['Conexus Credit Union', 'Think Tank Training Centre', 'TeamLi
   .current a { color: inherit; text-decoration: none; padding: 4px 8px; margin: -4px -8px; border-radius: 5px; }
   .current a:hover, .current a:active, .current a:focus-visible { background: #f1f1ef; }
   .current a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .chat-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: var(--section-gap); padding: 8px 16px; border-radius: 6px; background: #292b25; color: #ffffff; font-weight: 600; text-decoration: none; }
+  .chat-link:hover { background: #45473e; }
+  .chat-link:focus-visible { outline: 2px solid #292b25; outline-offset: 3px; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
   li, .current a { font-size: 20px; font-weight: 400; letter-spacing: -.035em; line-height: 1.4; }
   .skip { position: absolute; top: 12px; left: 12px; padding: 12px; background: #292b25; color: white; transform: translateY(-200%); z-index: 1; }
