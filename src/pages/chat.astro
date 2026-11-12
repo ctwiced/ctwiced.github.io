@@ -23,7 +23,7 @@ const embedUrl = `${bookingUrl}?hide_event_type_details=1&text_color=121212&prim
         <h1>Let’s chat</h1>
         <p>Pick a time that works for you.</p>
       </header>
-      <div class="calendly-inline-widget" data-url={embedUrl}></div>
+<div class="calendly-inline-widget" data-url={embedUrl} data-resize="true"></div>
       <p class="booking-fallback">Scheduler not loading? <a href={bookingUrl}>Book directly on Calendly</a>.</p>
     </main>
     <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
@@ -40,7 +40,7 @@ const embedUrl = `${bookingUrl}?hide_event_type_details=1&text_color=121212&prim
   .back-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; text-decoration: none; }
   .back-link:hover { color: #555555; }
   a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-  .calendly-inline-widget { width: 100%; max-width: 640px; height: 700px; margin-top: 24px; }
+  .calendly-inline-widget { width: 100%; height: 700px; margin-top: 24px; }
   .booking-fallback { margin-top: 16px; font-size: 14px; }
   @media (max-width: 367px) { main { width: 100%; } header, .booking-fallback { margin-inline: 24px; } }
 </style>
